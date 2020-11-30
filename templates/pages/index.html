@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+
+<head>
+    {% include 'includes/header.html' %}
+
+    {% include 'components/navbar.html' %}
+
+    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+        <div class="d-flex flex-column-fluid">
+            <div class="container-fluid">
+                <div class="row" id='design-tweets'>
+                    Loading...
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        const tweetsElement = document.getElementById('design-tweets')
+
+        const xhr = new XMLHttpRequest()
+        const method = "GET"
+        const url = "/tweets"
+        const responsetype = "json"
+
+        const handleDidLike = (tweetId, currentCount) => {
+            console.log(tweetId, currentCount)
+        }
+
+        const LikeBtn = (tweet) => {
+            return "<button onclick=handleDidLike(" + tweet.id + "," + tweet.likes +
+                ") class='btn btn-sm btn-primary'><i class='far fa-heart'></i>" + tweet.likes + " Likes</button>"
+        }
+
+        xhr.responseType = responsetype
+        xhr.open(method, url)
+        xhr.onload = function () {
+
+            const serverResponse = xhr.response
+            console.log(xhr.response)
+            const listedTweets = serverResponse.response
+            console.log(listedTweets)
+
+            var tweets = ""
+            listedTweets.map(tweet => {
+                var currentTweet =
+                    "<div class='col-lg-12'><div class='card card-custom mt-5' data-card='true' data-card-tooltips='false' id='kt_card_2'><div class='card-header'><div class='card-title'><h3 class='card-label'>" +
+                    tweet.id +
+                    "</h3></div><div class='card-toolbar'>" + LikeBtn(tweet) +
+                    "</div></div><div class='card-body'><p>" +
+                    tweet.content + "</p></div></div></div>"
+                tweets += currentTweet
+            })
+            tweetsElement.innerHTML = tweets
+        }
+        xhr.send()
+    </script>
+
+    {% include 'includes/footer.html' %}
+    </body>
+
+    </html>
