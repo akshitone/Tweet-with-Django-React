@@ -17,6 +17,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOGIN_URL = '/login'
+
+TWEET_ACTION_OPTIONS = ['like', 'unlike', 'retweet']
+
 
 # Application definition
 
@@ -27,6 +31,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework',
 
     'tweets'
 ]
@@ -113,3 +119,19 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [BASE_DIR / 'assets']
 STATIC_ROOT = BASE_DIR / 'static'
+
+DEFAULT_RENDERER_CLASSES = [
+    'rest_framework.renderers.JSONRenderer'
+]
+
+if DEBUG:
+    DEFAULT_RENDERER_CLASSES += [
+        'rest_framework.renderers.BrowsableAPIRenderer'
+    ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+}
